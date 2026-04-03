@@ -210,3 +210,28 @@ modules:
         path: README.md
       - type: file
         path: sdk_update.md
+
+  - name: host-sh
+    buildsystem: simple
+    build-commands:
+      - install -Dm755 host-sh.py /app/bin/host-sh
+
+      # Provide shims for common shell names. This list is derived from:
+      # https://github.com/zed-industries/zed/blob/134dec8f95bf884db5e27270f9beabd00ef4132d/crates/util/src/shell.rs#L299-L323
+      - mkdir -p /app/libexec/host-sh/
+      - ln -s /app/bin/host-sh /app/libexec/host-sh/powershell
+      - ln -s /app/bin/host-sh /app/libexec/host-sh/pwsh
+      - ln -s /app/bin/host-sh /app/libexec/host-sh/cmd
+      - ln -s /app/bin/host-sh /app/libexec/host-sh/nu
+      - ln -s /app/bin/host-sh /app/libexec/host-sh/fish
+      - ln -s /app/bin/host-sh /app/libexec/host-sh/csh
+      - ln -s /app/bin/host-sh /app/libexec/host-sh/tcsh
+      - ln -s /app/bin/host-sh /app/libexec/host-sh/rc
+      - ln -s /app/bin/host-sh /app/libexec/host-sh/xonsh
+      - ln -s /app/bin/host-sh /app/libexec/host-sh/elvish
+      - ln -s /app/bin/host-sh /app/libexec/host-sh/sh
+      - ln -s /app/bin/host-sh /app/libexec/host-sh/bash
+      - ln -s /app/bin/host-sh /app/libexec/host-sh/zsh
+    sources:
+      - type: file
+        path: host-sh.py

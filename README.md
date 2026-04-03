@@ -41,49 +41,35 @@ $ host-spawn <COMMAND>
 
 Another option to execute commands is to use your host shell in the integrated terminal instead of the sandbox one.
 
-For that, open Zed's settings via <kbd>Ctrl</kbd> + <kbd>,</kbd>
+For that, open Zed's settings via <kbd>Ctrl</kbd> + <kbd>,</kbd> and change Terminal > Environment > Shell from "System" to "Program", then replace the Program with `/app/libexec/host-sh/<YOUR SHELL>`. For example for Bash use `/app/libexec/host-sh/bash`.
 
-The following examples will figure out and launch the current user's preferred terminal. More configuration settings for spawning commands can be found in [Zed's documentation](https://zed.dev/docs/configuring-zed#terminal-shell).
-
-`flatpak-spawn --host`
+This can also be configured directly in the `settings.json`:
 
 ```json
 {
   "terminal": {
     "shell": {
-      "with_arguments": {
-        "program": "/usr/bin/flatpak-spawn",
-        "args": [
-          "--host",
-          "--env=TERM=xterm-256color",
-          "sh",
-          "-c",
-          "exec $(getent passwd $USER | cut -d: -f7)"
-        ]
-      }
+      "program": "/app/libexec/host-sh/bash"
     }
   },
 }
 ```
 
-`host-spawn`
+Shims are provided for many well-known shells. Alternatively, you can use your default shell by calling the `host-sh` wrapper directly:
 
 ```json
 {
   "terminal": {
     "shell": {
-      "with_arguments": {
-        "program": "/app/bin/host-spawn",
-        "args": [
-          "sh",
-          "-c",
-          "exec $(getent passwd $USER | cut -d: -f7)"
-        ]
-      }
+      "program": "/app/bin/host-sh"
     }
   },
 }
 ```
+
+Note however that if your default shell is not POSIX-compliant, specifying `host-sh` directly is known to cause a "Failed to load environment variables" error. The shims are preferred if available.
+
+More configuration settings for spawning commands can be found in [Zed's documentation](https://zed.dev/docs/reference/all-settings#terminal-shell).
 
 ### SDK extensions
 
